@@ -1,0 +1,33 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: sb-bookstore-service
+spec:
+  selector:
+    app: sb-bookstore-service
+  ports:
+  - protocol: TCP
+    port: 8080
+    nodePort: 30081
+  type: NodePort
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sb-bookstore-service
+spec:
+  selector:
+      matchLabels:
+        app: sb-bookstore-service
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: sb-bookstore-service
+    spec:
+      containers:
+        - name: sb-bookstore-service
+          image: sb-bookstore:latest
+          imagePullPolicy: Never
+          ports:
+          - containerPort: 8080
